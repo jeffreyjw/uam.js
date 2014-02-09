@@ -11,9 +11,7 @@ UAM.js is a Universal Asset Manager, designed to be easy extendable for many ass
 
 Download and include the library in your application:
 
-```javascript
-<script src="uam.min.js"></script>
-```
+`<script src="uam.min.js"></script>`
 
 Run Tests
 
