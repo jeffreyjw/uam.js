@@ -16,6 +16,8 @@ UAM.AssetManager = (function() {
 
   AssetManager.prototype.assetsToLoadLength = 0;
 
+  AssetManager.prototype.loadedAssetsLength = 0;
+
   function AssetManager(config) {
     this.config = config;
     this.assetTypes = config.assetTypes;
@@ -50,16 +52,21 @@ UAM.AssetManager = (function() {
   };
 
   AssetManager.prototype.loadAsset = function(assetType, url) {
+    var asset;
     if (__indexOf.call(this.loadedAssets, url) < 0) {
-      return this.assetTypes[assetType](url, this);
+      asset = new UAM.Asset(url, this);
+      return this.assetTypes[assetType](url, asset);
     }
   };
 
-  AssetManager.prototype.getAsset = function(url) {};
+  AssetManager.prototype.get = function(url) {
+    return this.loadedAssets[url].data;
+  };
 
   AssetManager.prototype._assetLoaded = function(asset) {
     this.loadedAssets[asset.url] = asset;
-    if ((this.loadedAssets.length === this.assetsToLoadLength) && (this.onload !== null)) {
+    ++this.loadedAssetsLength;
+    if ((this.loadedAssetsLength === this.assetsToLoadLength) && (this.onload !== null)) {
       return this.onload();
     }
   };

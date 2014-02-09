@@ -9,6 +9,7 @@ class UAM.AssetManager
   onload: null
   onerror: null
   assetsToLoadLength: 0
+  loadedAssetsLength: 0
 
   #
   # The config object is of following format:
@@ -40,15 +41,17 @@ class UAM.AssetManager
 
   loadAsset: (assetType, url) ->
     if url not in this.loadedAssets
-      this.assetTypes[assetType](url, this)
+      asset = new UAM.Asset(url, this)
+      this.assetTypes[assetType](url, asset)
 
-  getAsset: (url) ->
-    return
+  get: (url) ->
+    return this.loadedAssets[url].data
 
   _assetLoaded: (asset) ->
     this.loadedAssets[asset.url] = asset
+    ++this.loadedAssetsLength;
 
-    if (this.loadedAssets.length == this.assetsToLoadLength) and (this.onload != null)
+    if (this.loadedAssetsLength == this.assetsToLoadLength) and (this.onload != null)
       this.onload()
 
   _raiseError: (asset) ->

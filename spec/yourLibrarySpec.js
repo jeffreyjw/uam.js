@@ -17,9 +17,25 @@ describe("assetManager", function() {
     var am = new UAM.AssetManager(config);
 
     it('should load the first asset properly', function(){
-        am.onload = function(){
-            expect(am.get('one')).toBe('one1');
-        };
+        var flag = false;
+        var data = null;
+
+        runs(function(){
+            am.onload = function(){
+                data = am.get('one');
+                flag = true;
+            };
+
+            am.load();
+        });
+
+        waitsFor(function(){
+            return flag;
+        }, 'The value should be equal', 500);
+
+        runs(function(){
+            expect(data).toBe('one1');
+        });
     });
   
 });

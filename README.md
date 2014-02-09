@@ -1,21 +1,18 @@
-yourLibrary
+UAM.js
 ===
 
-A JavaScript Library
+UAM.js is a Universal Asset Manager, designed to be easy extendable for many asset types
 
 ### Maintainer
 
-[Christopher EnyTC](https://github.com/chrisenytc)
+[jeffreyjw](https://github.com/jeffreyjw)
 
 ### Get Started
 
-Install dependencies
+Download and include the library in your application:
 
-`sudo npm install && bower install`
-
-Build Project
-
-`grunt`
+```
+<script src="uam.min.js"></script>
 
 Run Tests
 
@@ -23,20 +20,52 @@ Open `SpecRunner.html` in your browser and test with jasmine
 
 ### How to use
 
+First you need to create a configuration object. The object has two keys:
+in assetTypes you declare what needs to be done when the manager will load an asset,
+and assets key is an object containing pointers to assets (most commonly those will
+be URL strings, but can be anything, like arrays).
+
+Here's an example of loading images:
 
 ```javascript
-//Get Version
-yourLibrary.version;
+var config = {
+    assetTypes: {
+        "image": function(url, asset){
+            var img = new Image();
+            img.onload = function(){
+                asset.data = img;
+                asset.done();
+            };
+            img.onerror = function(){ asset.error(); };
 
-//say Hello World
-yourLibrary.hello();
+            img.src = url;
+        }
+    },
+    assets: {
+        "image": [
+            "images/image1.png",
+            "images/image2.png"
+        ]
+    }
+};
+```
+
+After that, we just load everything with an AssetManager:
+
+```javascript
+var assetManager = new UAM.AssetManager(config);
+assetManager.onload = function(){
+    // use the loaded images
+    var myImage = assetManager.get('images/image1.png');
+};
+assetManager.load();
 ```
 
 ### License
 
 The MIT License (MIT)
 
-Copyright (c) 2013 yourName
+Copyright (c) 2013 jeffreyjw
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
