@@ -14,21 +14,26 @@
         ]
     };
     var assetManager = new GameAssetManager(assets);
-    assetManager.onload = function(){
+    assetManager.onload = function(loaded, toLoad){
+        if (loaded < toLoad) return;
+
         var tex = assetManager.get('bg.png');
         var bg = new PIXI.Sprite(tex);
 
-        bg.position.x = 0;
-        bg.position.y = 0;
-        bg.anchor.x = 0;
-        bg.anchor.y = 0;
+        bg.position.x = 400;
+        bg.position.y = 250;
+        bg.anchor.x = 0.5;
+        bg.anchor.y = 0.5;
         bg.tint = 0xFF0000;
 
         stage.addChild(bg);
 
         var animate = function()
         {
-            bg.rotation += 0.1;
+            bg.rotation += 0.01;
+            var s = 0.5 + 0.5*Math.abs(Math.sin(bg.rotation));
+            bg.scale.x = s;
+            bg.scale.y = s;
 
             if (keyboard.isKeyPressed(GAMEKBD.Keys.KEY_R))
             {
@@ -42,6 +47,8 @@
             {
                 bg.tint = 0x0000FF;
             }
+
+            keyboard.update();
 
             renderer.render(stage);
         };

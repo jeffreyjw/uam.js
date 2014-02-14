@@ -40,19 +40,24 @@ class UAM.AssetManager
         this.loadAsset(key, url)
 
   loadAsset: (assetType, url) ->
-    if url not in this.loadedAssets
+    if url not of this.loadedAssets
       asset = new UAM.Asset(url, this)
       this.assetTypes[assetType](url, asset)
 
   get: (url) ->
-    return this.loadedAssets[url].data
+    data = null
+    if url of this.loadedAssets
+      data = this.loadedAssets[url].data
+
+    return data
 
   _assetLoaded: (asset) ->
     this.loadedAssets[asset.url] = asset
     ++this.loadedAssetsLength;
 
-    if (this.loadedAssetsLength == this.assetsToLoadLength) and (this.onload != null)
-      this.onload()
+    if (this.onload != null)
+      this.onload(this.loadedAssetsLength, this.assetsToLoadLength)
 
   _raiseError: (asset) ->
-    return
+    if this.onerror != null
+      this.onerror(asset.url)

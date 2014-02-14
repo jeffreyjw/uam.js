@@ -1,6 +1,4 @@
 "use strict";
-var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-
 UAM.AssetManager = (function() {
   AssetManager.prototype.config = null;
 
@@ -53,25 +51,34 @@ UAM.AssetManager = (function() {
 
   AssetManager.prototype.loadAsset = function(assetType, url) {
     var asset;
-    if (__indexOf.call(this.loadedAssets, url) < 0) {
+    if (!(url in this.loadedAssets)) {
       asset = new UAM.Asset(url, this);
       return this.assetTypes[assetType](url, asset);
     }
   };
 
   AssetManager.prototype.get = function(url) {
-    return this.loadedAssets[url].data;
+    var data;
+    data = null;
+    if (url in this.loadedAssets) {
+      data = this.loadedAssets[url].data;
+    }
+    return data;
   };
 
   AssetManager.prototype._assetLoaded = function(asset) {
     this.loadedAssets[asset.url] = asset;
     ++this.loadedAssetsLength;
-    if ((this.loadedAssetsLength === this.assetsToLoadLength) && (this.onload !== null)) {
-      return this.onload();
+    if (this.onload !== null) {
+      return this.onload(this.loadedAssetsLength, this.assetsToLoadLength);
     }
   };
 
-  AssetManager.prototype._raiseError = function(asset) {};
+  AssetManager.prototype._raiseError = function(asset) {
+    if (this.onerror !== null) {
+      return this.onerror(asset.url);
+    }
+  };
 
   return AssetManager;
 
