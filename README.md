@@ -15,7 +15,7 @@ Download and include the library in your application:
 
 Run Tests
 
-Open `SpecRunner.html` in your browser and test with jasmine
+Open `test/test0/index.html` in your browser and check out the example
 
 ### How to use
 
@@ -53,12 +53,14 @@ After that, we just load everything with an AssetManager:
 
 ```javascript
 var assetManager = new UAM.AssetManager(config);
-assetManager.onload = function(){
+assetManager.addEventListener("loaded", function(){
     // use the loaded images
     var myImage = assetManager.get('images/image1.png');
-};
+});
 assetManager.load();
 ```
+
+Possible events are: loaded(), error(url) and progress(amountLeftToLoad, amountAllToLoad)
 
 ### License
 
