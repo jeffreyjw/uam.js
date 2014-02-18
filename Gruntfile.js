@@ -39,9 +39,11 @@ module.exports = function(grunt) {
                 bare: true
               },
               files: {
-                "<%= dirs.js %>/main.js" : "<%= dirs.coffee %>/main.coffee",
-                "<%= dirs.js %>/asset.js" : "<%= dirs.coffee %>/asset.coffee",
-                "<%= dirs.js %>/assetManager.js" : "<%= dirs.coffee %>/assetManager.coffee"
+                "<%= dirs.js %>/uam.js" : [
+                    "<%= dirs.coffee %>/main.coffee",
+                    "<%= dirs.coffee %>/asset.coffee",
+                    "<%= dirs.coffee %>/assetManager.coffee"
+                ]
               }
             }
         },
@@ -54,11 +56,7 @@ module.exports = function(grunt) {
             },
             dist: {
               files: {
-                  "<%= dirs.build %>/uam.min.js": [
-                      "<%= dirs.js %>/main.js",
-                      "<%= dirs.js %>/asset.js",
-                      "<%= dirs.js %>/assetManager.js"
-                  ]
+                  "<%= dirs.build %>/uam.min.js": "<%= dirs.js %>/uam.js"
               }
             }
         },
