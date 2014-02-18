@@ -14,8 +14,7 @@
         ]
     };
     var assetManager = new GameAssetManager(assets);
-    assetManager.onload = function(loaded, toLoad){
-        if (loaded < toLoad) return;
+    assetManager.addEventListener("loaded", function(loaded, toLoad){
 
         var tex = assetManager.get('bg.png');
         var bg = new PIXI.Sprite(tex);
@@ -54,7 +53,7 @@
         };
 
         TweenLite.ticker.addEventListener("tick", animate);
-    };
+    });
     assetManager.load();
 
 
